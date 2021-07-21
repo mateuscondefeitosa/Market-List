@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const Product = require('./models/product');
 
-
-mongoose.connect('mongodb://localhost:27017/movieApp', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("MONGOOSE CONNECTION OPEN!!");
     })
@@ -14,10 +15,45 @@ mongoose.connect('mongodb://localhost:27017/movieApp', { useNewUrlParser: true, 
     })
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('views engine', 'ejs');
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
-app.get('/dog', (req, res) => {
-    res.send('AUAU!');
+// Rota para achar os produtos e colocar em uma lista
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', { products });
+})
+
+// Rota para criar um produto novo
+app.get('/products/new', (req, res) => {
+    res.render('products/new')
+})
+
+app.post('/products', async (req, res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+})
+
+// Rota para ver a descrição dos produtos
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/show', { product });
+})
+
+// Rota para dar UPDATE
+app.get('/products/:id/edit', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/edit', { product })
+})
+
+app.put('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
+    res.redirect(`/products/${product._id}`);
 })
 
 app.listen(3000, () => {

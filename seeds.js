@@ -24,33 +24,34 @@ mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true,
 //     })
 
 
-const seedProducts = [
-    {
-        name: 'Fairy Eggplant',
-        price: 1.00,
-        Category: 'vegetable'
-    },
-    {
-        name: 'Organic Goddess Melon',
-        price: 4.99,
-        Category: 'fruit'
-    },
-    {
-        name: 'Organic Mini Seedless Watermelon',
-        price: 3.99,
-        Category: 'fruit'
-    },
-    {
-        name: 'Organic Celery',
-        price: 1.50,
-        Category: 'vegetable'
-    },
-    {
-        name: 'Chocolate Whole Milk',
-        price: 2.69,
-        Category: 'dairy'
-    }
-]
+// const seedProducts = [
+//     {
+//         name: 'Fairy Eggplant',
+//         price: 1.00,
+//         Category: 'vegetable'
+//     },
+//     {
+//         name: 'Organic Goddess Melon',
+//         price: 4.99,
+//         Category: 'fruit'
+//     },
+//     {
+//         name: 'Organic Mini Seedless Watermelon',
+//         price: 3.99,
+//         Category: 'fruit'
+//     },
+//     {
+//         name: 'Organic Celery',
+//         price: 1.50,
+//         Category: 'vegetable'
+//     },
+//     {
+//         name: 'Chocolate Whole Milk',
+//         price: 2.69,
+//         Category: 'dairy'
+//     }
+// ]
+
 Product.insertMany(seedProducts)
     .then(res => {
         console.log(res)
